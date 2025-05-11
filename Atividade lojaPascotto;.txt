@@ -1,0 +1,88 @@
+
+--Criando DATABASE
+CREATE DATABASE lojaPascotto;
+USE lojaPascotto;
+-- Criando tabelas
+
+CREATE TABLE Cargos (
+    id_cargo INT PRIMARY KEY AUTO_INCREMENT,
+    nome_cargo VARCHAR(50) NOT NULL,
+    descricao VARCHAR(100)
+);
+
+CREATE TABLE Funcionarios (
+    id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    id_cargo INT NOT NULL,
+    FOREIGN KEY (id_cargo) REFERENCES Cargos(id_cargo)
+);
+
+CREATE TABLE Clientes (
+    id_cliente INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    endereco VARCHAR(100)
+);
+
+CREATE TABLE Produtos (
+    id_produto INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    descricao VARCHAR(100),
+    preco DECIMAL(10,2) NOT NULL,
+    estoque INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE Pedidos (
+    id_pedido INT PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT NOT NULL,
+    data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) ,
+    valor_total DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente)
+);
+
+CREATE TABLE ItensPedido (
+    id_item INT PRIMARY KEY AUTO_INCREMENT,
+    id_pedido INT NOT NULL,
+    id_produto INT NOT NULL,
+    quantidade INT NOT NULL,
+    preco_unitario DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (id_pedido) REFERENCES Pedidos(id_pedido),
+    FOREIGN KEY (id_produto) REFERENCES Produtos(id_produto)
+);
+
+--Inserindo os dados
+INSERT INTO Cargos (nome_cargo, descricao) VALUES 
+('Vendedor', 'Responsável por realizar vendas e atendimento ao cliente');
+('Supervisor', 'Coordena a equipe de vendas e gerencia operações diárias');
+('Suporte TI', 'Responsável pela manutenção do sistema e infraestrutura tecnológica');
+
+INSERT INTO Funcionarios (nome, email, senha, id_cargo) VALUES 
+('João Castro', 'joao@lojapascotto.com', 'senha123', 256), 1);
+('Ana MAria', 'maria@lojapascotto.com','mariA456', 256), 2);
+('Carlos Alves', 'carlos@lojapascotto.com','ti@789', 256), 3);
+
+
+INSERT INTO Clientes (nome, email, senha, endereco) VALUES 
+('Ana Pereira', 'ana123@gmail.com', 'cliente123', 'Rua A, 123 - Centro');
+('Pedro Rocha', 'pedro159@outlook.com','pedro456', 'Av. B, 456 - Vila Nova'); 
+VALUES ('Empresa XYZ', 'contato@xyz.com', 'xyz789', 256), 'Rua C, 789 - Zona Industrial');
+
+INSERT INTO Produtos (nome, descricao, preco, estoque) VALUES 
+('Camiseta Azul', 'Camiseta 100% algodão, tamanho P ao GG', 29.90, 100);
+('Tênis Esportivo', 'Tênis para corrida, amortecimento premium I', 1999.90, 50);
+('Boné III', 'Boné ajustável, várias cores', 449.90, 10);
+
+INSERT INTO Pedidos (id_cliente, valor_total) VALUES 
+(1, 29.90);
+(2, 1990.90);
+(3, 449,90);
+
+INSERT INTO ItensPedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES 
+(1, 1, 1, 29.90);
+(2, 2, 1, 1999.90), 
+(2, 3, 1, 449.90);
+
